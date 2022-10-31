@@ -1,4 +1,2 @@
-*.txt filter=lfs diff=lfs merge=lfs -text
-data/* filter=lfs diff=lfs merge=lfs -text
-output/* filter=lfs diff=lfs merge=lfs -text
-output/fof/soc-pokec-relationships-small/final/part-r-00000 filter=lfs diff=lfs merge=lfs -text
+data/** filter=lfs diff=lfs merge=lfs -text
+output/** filter=lfs diff=lfs merge=lfs -text

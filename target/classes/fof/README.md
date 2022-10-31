@@ -59,6 +59,6 @@ class Reducer
 
 源代码保存在src/main/java/fof/Friends.java，运行结果保存在output/fof中，sample和soc-pokec-relationships-small文件夹中分别是sample.txt和soc-pokec-relationships-small.txt中数据的运行结果。其中每个文件夹中包括job1，job2，job3，final，相关说明见设计思路。
 
-注：由于soc-pokec-relationships-small运行结果较大，github仓库仅上传了最后的final文件夹展示最终运行结果，运行结果截图如下所示。
+注：由于soc-pokec-relationships-small运行结果较大，github仓库无法上传最后输出展示最终运行结果，在README中展示部分运行结果，运行结果截图如下所示。
 
 <center><img src="https://s1.imagehub.cc/images/2022/10/28/2022-10-28-13.16.31.png" width="80%"></center>
