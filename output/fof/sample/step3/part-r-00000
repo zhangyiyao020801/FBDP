@@ -1,3 +1,15 @@
+<<<<<<< HEAD
 version https://git-lfs.github.com/spec/v1
-oid sha256:276d385eb8355040395d9e231d98a009613ae702780d6bf5bcb7acb4ffade435
-size 293
+oid sha256:3601a97dba797f29396811283570a8c89cf3d5eecec597c0aea1e74628bc68da
+size 283
+=======
+1	
+4	5(1:[1])
+5	4(1:[1])
+3	4(1:[1])
+2	4(1:[1])
+4	3(1:[1])
+4	2(1:[1])
+2	5(2:[1,3])
+5	2(2:[1,3])
+>>>>>>> 0e049ad73d3fe7ab8cd03d6d375da74863d9a783
