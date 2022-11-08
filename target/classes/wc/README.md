@@ -33,8 +33,8 @@ for row in listReader:
 将RedditNews_new.txt和stop-word-list.txt上传到hdfs文件管理系统。
 
 ```
-bin/hdfs -put /Users/zhangyiyao/Desktop/大三上/金融大数据处理技术/FBDP/RedditNews_new.txt input/RedditNews_new.txt
-bin/hdfs -put /Users/zhangyiyao/Desktop/大三上/金融大数据处理技术/FBDP/stop-word-list.txt input/stop-word-list.txt
+bin/hdfs dfs -put /Users/zhangyiyao/Desktop/大三上/金融大数据处理技术/FBDP/RedditNews_new.txt input/RedditNews_new.txt
+bin/hdfs dfs -put /Users/zhangyiyao/Desktop/大三上/金融大数据处理技术/FBDP/stop-word-list.txt input/stop-word-list.txt
 ```
 
 实验利用vscode完成，利用maven构建管理代码，生成java文件对应的jar包后，需要在命令行输入```zip -d FBDP.jar META-INF/LICENSE```，删除META-INF/LICENSE文件。
