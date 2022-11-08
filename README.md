@@ -3,8 +3,12 @@
 
 ### 所有实验数据保存在data文件夹中。
 
-### Homework5 相关源代码以及README.md保存在src/main/java/wc中，相关运行结果保存在output/wc中。
+### 所有实验源代码保存在src文件夹中。
 
-### Homework6 相关源代码以及README.md保存在src/main/java/fof中，相关运行结果保存在output/fof中。
+### 详细信息如下表所示。
 
-### Homework7 相关源代码以及README.md保存在src/main/java/fis中，相关运行结果保存在output/fis中。
+| 名称      | 内容              | 源代码以及README路径 | 运行结果路径 |
+| --------- | ----------------- | -------------------- | ------------ |
+| homework5 | word count        | src/main/java/wc     | output/wc    |
+| homework6 | friend of friend  | src/main/java/fof    | output/fof   |
+| homework7 | frequent item set | src/main/java/fis    | output/fis   |
