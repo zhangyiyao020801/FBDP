@@ -14,7 +14,26 @@ bin/spark-submit --class org.apache.spark.examples.SparkPi --master 'local[2]' .
 
 #### 2.1 编写Spark程序，统计stocks_small.csv表中每⽀股票每年的交易数量，并按年份，将股票交易数量从⼤到⼩进⾏排序。
 
+利用spark.read读取stock_small.csv，将其存储为dataframe。按年份，先筛选出对应年份的交易，再根据stock_symbol对交易量进行求和，最后从大到小进行排序，将每年的统计结果单独存在一张表中。对应的代码以及运行结果截图如下。
+
+```
+tmp = df.filter(func.year(df['date']) == y)
+tmp = tmp.groupBy('stock_symbol').agg({'stock_volume': 'sum'})
+ans = tmp.sort(tmp['sum(stock_volume)'].desc())
+```
+
+<center><img src="https://s1.imagehub.cc/images/2022/12/11/71dc6836795c4c27bfe3dec166a4a4d7.png" width="30%"></center>
+
 #### 2.2 编写Spark程序，统计stocks_small.csv表中收盘价（price_close）⽐开盘价（price_open）差价最⾼的前十条记录。
+
+利用spark.read读取stock_small.csv，将其存储为dataframe。计算每条记录收盘价与开盘价差的绝对值，然后从大到小进行排序，选取前十条保存。对应的代码以及运行结果截图如下。
+
+```
+df = df.select(df['exchange'], df['stock_symbol'], df['date'], df['stock_price_close'], df['stock_price_open'], (func.abs(df['stock_price_close'] - df['stock_price_open'])).alias('tmp'))
+ans = df.sort(df['tmp'].desc()).limit(10)
+```
+
+<center><img src="https://s1.imagehub.cc/images/2022/12/11/e7270f985a4fc6ab62b6eb73b57deafb.png" width="30%"></center>
 
 ### 3.任务二
 
@@ -44,3 +63,53 @@ select year, avg from (select year, AVG(price) as avg from AAPL group by year) w
 <center><img src="https://s1.imagehub.cc/images/2022/12/09/3659a90608ed08b796f04a735c8bd7c7.png" width="20%"></center>
 
 ### 4.任务三：根据表stock_data.csv 中的数据，基于Spark MLlib 或者Spark ML 编写程序在收盘之前预测当日股票的涨跌，并评估实验结果的准确率。
+
+首先注意到stock_data.csv中的数据保存的类型是string，因此需要进行数据类型的转换。
+
+```
+for x in ['stock_price_open', 'stock_price_high', 'stock_price_low', 'stock_volume', 'label']:
+    df = df.withColumn(x, df[x].astype('float'))
+```
+
+接着需要划分特征和想要预测的标签。
+
+```
+vectorAssembler = VectorAssembler(inputCols=['stock_price_open', 'stock_price_high', 'stock_price_low', 'stock_volume'], outputCol = 'features')
+new_df = vectorAssembler.transform(df)
+new_df = new_df.select(['features', 'label'])
+```
+
+同时，需要去除重复数据和缺失值。
+
+```
+new_df = new_df.dropDuplicates()
+new_df = new_df.na.drop()
+```
+
+按8:2的比例划分数据集，得到训练集和测试集。
+
+```
+train, test = new_df.randomSplit([0.8, 0.2], seed = 10)
+```
+
+接下来利用不同的模型进行训练，以对率回归为例，首先训练模型再对模型进行评估。
+
+```
+lr = LogisticRegression(featuresCol='features', labelCol='label')
+lr_model = lr.fit(train)
+predictions = lr_model.transform(test)
+lr_evaluator = BinaryClassificationEvaluator().setLabelCol('label')
+accuracy = lr_evaluator.evaluate(predictions)
+tp = predictions[(predictions.label == 1) & (predictions.prediction == 1)].count()
+tn = predictions[(predictions.label == 0) & (predictions.prediction == 0)].count()
+fp = predictions[(predictions.label == 0) & (predictions.prediction == 1)].count()
+fn = predictions[(predictions.label == 1) & (predictions.prediction == 0)].count()
+recall = float(tp) / (tp + fn)
+precision = float(tp) / (tp + fp)
+f1 = 2 * recall * precision / (recall + precision)
+result.append(['Logistic Regression', accuracy, precision, recall, f1])
+```
+
+一共使用了四种不同的模型：对率回归，决策树，随机森林，朴素贝叶斯。模型评估结果保存在result文件夹中的task3.csv中。观察结果可以发现，对率回归的准确率较高，达到80%，但四个模型的f1值都偏低，可能的原因是模型普遍会判断当日股票下跌，使得f1偏低。因此需要改进数据以及数据输入的特征，实现更可靠的预测。
+
+<center><img src="https://s1.imagehub.cc/images/2022/12/11/2602c69e805e7e82600c92469e6cac24.png" width="50%"></center>
