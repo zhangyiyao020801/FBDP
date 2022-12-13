@@ -22,7 +22,7 @@ tmp = tmp.groupBy('stock_symbol').agg({'stock_volume': 'sum'})
 ans = tmp.sort(tmp['sum(stock_volume)'].desc())
 ```
 
-<center><img src="https://s1.imagehub.cc/images/2022/12/11/71dc6836795c4c27bfe3dec166a4a4d7.png" width="30%"></center>
+<center><img src="https://s1.imagehub.cc/images/2022/12/11/71dc6836795c4c27bfe3dec166a4a4d7.png" width="10%"></center>
 
 #### 2.2 编写Spark程序，统计stocks_small.csv表中收盘价（price_close）⽐开盘价（price_open）差价最⾼的前十条记录。
 
@@ -47,7 +47,7 @@ select date, stock_symbol, stock_price_close from stock_small where stock_symbol
 
 将结果保存在csv文件中，结果截图如下所示。
 
-<center><img src="https://s1.imagehub.cc/images/2022/12/09/fb7a51f86d8934b51f871dd4b9524471.png" width="20%"></center>
+<center><img src="https://s1.imagehub.cc/images/2022/12/09/fb7a51f86d8934b51f871dd4b9524471.png" width="10%"></center>
 
 #### 3.2 统计苹果公司 (stock_symbol = AAPL) 年平均调整后收盘价(stock_price_adj_close) ⼤于50美元的年份以及当年的年平均调整后收盘价。
 
@@ -112,4 +112,4 @@ result.append(['Logistic Regression', accuracy, precision, recall, f1])
 
 一共使用了四种不同的模型：对率回归，决策树，随机森林，朴素贝叶斯。模型评估结果保存在result文件夹中的task3.csv中。观察结果可以发现，对率回归的准确率较高，达到80%，但四个模型的f1值都偏低，可能的原因是模型普遍会判断当日股票下跌，使得f1偏低。因此需要改进数据以及数据输入的特征，实现更可靠的预测。
 
-<center><img src="https://s1.imagehub.cc/images/2022/12/11/2602c69e805e7e82600c92469e6cac24.png" width="50%"></center>
+<center><img src="https://s1.imagehub.cc/images/2022/12/11/2602c69e805e7e82600c92469e6cac24.png" width="60%"></center>
