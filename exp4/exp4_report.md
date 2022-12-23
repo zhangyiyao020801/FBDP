@@ -14,7 +14,7 @@ bin/spark-submit --class org.apache.spark.examples.SparkPi --master 'local[2]' .
 
 #### 2.1 编写Spark程序，统计stocks_small.csv表中每⽀股票每年的交易数量，并按年份，将股票交易数量从⼤到⼩进⾏排序。
 
-利用spark.read读取stock_small.csv，将其存储为dataframe。按年份，先筛选出对应年份的交易，再根据stock_symbol对交易量进行求和，最后从大到小进行排序，将每年的统计结果单独存在一张表中。对应的代码以及运行结果截图如下。
+利用spark.read读取stock_small.csv，将其存储为dataframe。按年份，先筛选出对应年份的交易，再根据stock_symbol对交易量进行求和，最后从大到小进行排序，将每年的统计结果单独存在一张表中，具体运行结果保存在result/task1_1文件夹中，每年的结果保存在单独的表格中。对应的代码以及运行结果截图如下。
 
 ```
 tmp = df.filter(func.year(df['date']) == y)
@@ -55,7 +55,6 @@ select date, stock_symbol, stock_price_close from stock_small where stock_symbol
 
 ```
 select year(date) as year, stock_price_adj_close as price from stock_small where stock_symbol = 'AAPL'
-
 select year, avg from (select year, AVG(price) as avg from AAPL group by year) where avg > 50
 ```
 将结果保存在csv文件中，结果截图如下所示。
@@ -92,11 +91,16 @@ new_df = new_df.na.drop()
 train, test = new_df.randomSplit([0.8, 0.2], seed = 10)
 ```
 
-接下来利用不同的模型进行训练，以对率回归为例，首先训练模型再对模型进行评估。
+接下来利用不同的模型进行训练，以对率回归为例，首先训练模型。
 
 ```
 lr = LogisticRegression(featuresCol='features', labelCol='label')
 lr_model = lr.fit(train)
+```
+
+最后根据训练完成的模型对测试集进行预测，然后计算出具体的tp，tn，fp，fn，进而计算出准确率，查准率，查全率和f1值。
+
+```
 predictions = lr_model.transform(test)
 lr_evaluator = BinaryClassificationEvaluator().setLabelCol('label')
 accuracy = lr_evaluator.evaluate(predictions)
@@ -110,6 +114,6 @@ f1 = 2 * recall * precision / (recall + precision)
 result.append(['Logistic Regression', accuracy, precision, recall, f1])
 ```
 
-一共使用了四种不同的模型：对率回归，决策树，随机森林，朴素贝叶斯。模型评估结果保存在result文件夹中的task3.csv中。观察结果可以发现，对率回归的准确率较高，达到80%，但四个模型的f1值都偏低，可能的原因是模型普遍会判断当日股票下跌，使得f1偏低。因此需要改进数据以及数据输入的特征，实现更可靠的预测。
+实验中一共使用了四种不同的模型：对率回归，决策树，随机森林，朴素贝叶斯。模型评估结果保存在result文件夹中的task3.csv中。观察结果可以发现，对率回归的准确率较高，达到80%，但四个模型的f1值都偏低，可能的原因是模型普遍会判断当日股票下跌，使得f1偏低。因此需要改进数据以及数据输入的特征，实现更可靠的预测。
 
 <center><img src="https://s1.imagehub.cc/images/2022/12/11/2602c69e805e7e82600c92469e6cac24.png" width="60%"></center>
