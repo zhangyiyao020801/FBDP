@@ -2,7 +2,7 @@
 
 ### 1.spark安装
 
-在https://spark.apache.org/downloads.html下载spark安装包，将安装包解压后移动到```/usr/local/Cellar```路径下。运行样例脚本如下，正常输出结果。
+在```https://spark.apache.org/downloads.html```下载spark安装包，将安装包解压后移动到```/usr/local/Cellar```路径下。运行样例脚本如下，正常输出结果。
 
 ```
 bin/spark-submit --class org.apache.spark.examples.SparkPi --master 'local[2]' ./examples/jars/spark-examples_2.12-3.3.1.jar 100
